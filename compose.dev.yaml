@@ -1,0 +1,29 @@
+services:
+  vnc-client:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 8080:8080
+    environment:
+      - PREACT_APP_ROSBRIDGE_SERVER_HOST=${PREACT_APP_ROSBRIDGE_SERVER_HOST:-slam}
+
+  websockify:
+    build:
+      dockerfile: Dockerfile.websockify
+    ports:
+      - 5902:5902
+    command: websockify 5902 vnc-server:5901
+
+  vnc-server:
+    build:
+      dockerfile: Dockerfile.vnc-server
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    ipc: host
+    environment:
+      - DISPLAY
+    # ports:
+    #   - 5901:5901
+    command: x11vnc -rfbport 5901 -display $DISPLAY -loop
