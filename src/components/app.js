@@ -1,52 +1,31 @@
 import { h } from "preact";
-
 import { useRef, useState, useEffect } from 'preact/hooks';
-
-// https://www.npmjs.com/package/react-vnc
 import { VncScreen } from 'react-vnc';
-
-import { MantineProvider, Flex, AppShell, Header } from '@mantine/core';
+import { MantineProvider, Flex, AppShell, Header, TextInput, Button, Text } from '@mantine/core';
 
 function App() {
   const ref = useRef();
-
-  let url = `ws://${window.location.hostname}:5902`;
-
-  // // Set the initial credentials state
-  const [rfbOptions, setRfbOptions] = useState({
-    ...rfbOptions, // Keep the rest of the RFB options unchanged
-    credentials: {
-      password: 'qwerty',  // Replace 'yourPasswordHere' with your actual password
-    },
-  });
+  const url = `ws://${window.location.hostname}:5902`;
 
   // Set the initial credentials state
-  // const [rfbOptions, setRfbOptions] = useState({});
+  const [password, setPassword] = useState('');
+  const [rfbOptions, setRfbOptions] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // useEffect(() => {
-  //   setRfbOptions({
-  //     ...rfbOptions, // Keep the rest of the RFB options unchanged
-  //     credentials: {
-  //       password: 'qwerty',  // Replace 'yourPasswordHere' with your actual password
-  //     },
-  //   });
+  const handlePasswordSubmit = (event) => {
+    event.preventDefault();
 
-  // }, []);
-
-  // Define the onCredentialsRequired callback function
-  const onCredentialsRequired = () => {
-    // For the sake of this example, we're using a fixed password
-    // In a real application, you might prompt the user for this, or get it from a secure location
-    console.log('onCredentialsRequired');
-    setRfbOptions({
-      ...rfbOptions, // Keep the rest of the RFB options unchanged
-      credentials: {
-        password: 'qwerty',  // Replace 'yourPasswordHere' with your actual password
-      },
-    });
+    if (password === 'qwerty') {
+      setRfbOptions({
+        credentials: {
+          password: password,
+        },
+      });
+      setErrorMessage('');
+    } else {
+      setErrorMessage('Invalid password');
+    }
   };
-
-
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark" }}>
@@ -64,22 +43,39 @@ function App() {
           maxWidth: '50%',
         }}
       >
-        
-        <VncScreen
-          url={url}
-          rfbOptions={rfbOptions}
+        {!rfbOptions.credentials && (
+          <form onSubmit={handlePasswordSubmit}>
+            <TextInput
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              style={{ marginBottom: '1rem' }}
+            />
+            {errorMessage && (
+              <Text color="red" size="sm" style={{ marginBottom: '1rem' }}>
+                {errorMessage}
+              </Text>
+            )}
+            <Button type="submit">Submit</Button>
+          </form>
+        )}
 
-          scaleViewport
-          background="#000000"
-          style={{
-            width: '75vw',
-            height: '75vh',
-          }}
-          ref={ref}
-          // onCredentialsRequired={onCredentialsRequired}
-        />
+        {rfbOptions.credentials && (
+          <VncScreen
+            url={url}
+            rfbOptions={rfbOptions}
+            scaleViewport
+            background="#000000"
+            style={{
+              width: '75vw',
+              height: '75vh',
+            }}
+            ref={ref}
+          />
+        )}
       </Flex>
-    </MantineProvider >
+    </MantineProvider>
   );
 }
 
