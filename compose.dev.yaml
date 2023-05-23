@@ -8,13 +8,20 @@ services:
       - 8080:8080
     environment:
       - PREACT_APP_ROSBRIDGE_SERVER_HOST=${PREACT_APP_ROSBRIDGE_SERVER_HOST:-slam}
+    network_mode: host
 
   websockify:
     build:
       dockerfile: Dockerfile.websockify
-    ports:
-      - 5902:5902
-    command: websockify 5902 vnc-server:5901
+    # ports:
+    #   - 5902:5902
+    network_mode: host
+    # command: websockify 5902 vnc-server:5901
+    environment:
+      - VNC_SERVER_HOST=localhost
+      - VNC_SERVER_PORT=5901
+      - WEBSOCKIFY_PORT=5902
+    command: websockify 5902 localhost:5901
 
   vnc-server:
     build:
@@ -23,7 +30,11 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     ipc: host
     environment:
+      # - DISPLAY=:1
       - DISPLAY
+      - PASSWORD=qwerty
+      - VNC_SERVER_PORT=5901
     # ports:
     #   - 5901:5901
-    command: x11vnc -rfbport 5901 -display $DISPLAY -loop
+    network_mode: host
+    # command: x11vnc -rfbport 5901 -display $DISPLAY -loop

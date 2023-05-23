@@ -8,4 +8,6 @@ RUN apt-get update -y && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# CMD x11vnc -display :1
+COPY vnc-server-startup.sh /startup.sh
+
+CMD [ "/startup.sh" ]
