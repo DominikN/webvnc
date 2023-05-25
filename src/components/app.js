@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { useRef, useState, useEffect } from 'preact/hooks';
 import { VncScreen } from 'react-vnc';
-import { MantineProvider, Flex, AppShell, Header, TextInput, Button, Text } from '@mantine/core';
+import { MantineProvider, Flex, Text, TextInput, Button } from '@mantine/core';
 
 function App() {
   const ref = useRef();
@@ -49,31 +49,36 @@ function App() {
         }}
       >
         {!rfbOptions.credentials && (
-          <form onSubmit={handlePasswordSubmit}>
-            {!errorMessage && (
-              <TextInput
-                type="password"
-                label="Password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                style={{ marginBottom: '1rem' }}
-              />
-            )}
-            {errorMessage && (
-              <TextInput
-                error={errorMessage}
-                type="password"
-                label="Password"
-                color="red"
-                placeholder="Enter password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                style={{ marginBottom: '1rem' }}
-              />
-            )}
-            <Button type="submit">Submit</Button>
-          </form>
+          <>
+            <img src="assets/sygnet.svg" alt="logo" style={{width: '20%', height: '20%'}} />
+            <Text fz="xl">Remote Desktop</Text>
+            <form onSubmit={handlePasswordSubmit}>
+
+              {!errorMessage && (
+                <TextInput
+                  type="password"
+                  label="Password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  style={{ marginBottom: '2rem' }}
+                />
+              )}
+              {errorMessage && (
+                <TextInput
+                  error={errorMessage}
+                  type="password"
+                  label="Password"
+                  color="red"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  style={{ marginBottom: '2rem' }}
+                />
+              )}
+              <Button variant="outline" type="submit" color="red" fullWidth >Submit</Button>
+            </form>
+          </>
         )}
 
         {rfbOptions.credentials && (
