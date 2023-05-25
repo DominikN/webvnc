@@ -15,15 +15,31 @@ function App() {
   const handlePasswordSubmit = (event) => {
     event.preventDefault();
 
-    if (password === 'qwerty') {
-      setRfbOptions({
-        credentials: {
-          password: password,
-        },
-      });
-      setErrorMessage('');
+    setRfbOptions({
+      credentials: {
+        password: password,
+      },
+    });
+
+    // if (password === 'qwerty') {
+    //   setRfbOptions({
+    //     credentials: {
+    //       password: password,
+    //     },
+    //   });
+    //   setErrorMessage('');
+    // } else {
+    //   setErrorMessage('Invalid password');
+    // }
+  };
+
+  const handleSecurityFailure = (e) => {
+    console.log(e);
+    if(e.detail.status === 1) {  // According to the VNC protocol, status code 2 represents an authentication error
+      setErrorMessage('Wrong password, please try again');
+      setRfbOptions({});  // Reset rfbOptions to prompt for password again
     } else {
-      setErrorMessage('Invalid password');
+      setErrorMessage(`Security failure: ${e.detail.reason}`);
     }
   };
 
@@ -72,6 +88,7 @@ function App() {
               height: '75vh',
             }}
             ref={ref}
+            onSecurityFailure={handleSecurityFailure}
           />
         )}
       </Flex>
