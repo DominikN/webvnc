@@ -20,22 +20,11 @@ function App() {
         password: password,
       },
     });
-
-    // if (password === 'qwerty') {
-    //   setRfbOptions({
-    //     credentials: {
-    //       password: password,
-    //     },
-    //   });
-    //   setErrorMessage('');
-    // } else {
-    //   setErrorMessage('Invalid password');
-    // }
   };
 
   const handleSecurityFailure = (e) => {
     console.log(e);
-    if(e.detail.status === 1) {  // According to the VNC protocol, status code 2 represents an authentication error
+    if (e.detail.status === 1) {  // According to the VNC protocol, status code 2 represents an authentication error
       setErrorMessage('Wrong password, please try again');
       setRfbOptions({});  // Reset rfbOptions to prompt for password again
     } else {
@@ -61,17 +50,27 @@ function App() {
       >
         {!rfbOptions.credentials && (
           <form onSubmit={handlePasswordSubmit}>
-            <TextInput
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              style={{ marginBottom: '1rem' }}
-            />
+            {!errorMessage && (
+              <TextInput
+                type="password"
+                label="Password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                style={{ marginBottom: '1rem' }}
+              />
+            )}
             {errorMessage && (
-              <Text color="red" size="sm" style={{ marginBottom: '1rem' }}>
-                {errorMessage}
-              </Text>
+              <TextInput
+                error={errorMessage}
+                type="password"
+                label="Password"
+                color="red"
+                placeholder="Enter password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                style={{ marginBottom: '1rem' }}
+              />
             )}
             <Button type="submit">Submit</Button>
           </form>
