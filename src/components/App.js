@@ -1,8 +1,7 @@
 import { h } from "preact";
-import { useRef, useState, useEffect } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 import { VncScreen } from 'react-vnc';
-import { MantineProvider, Flex, Text, TextInput, Button, Paper, Image } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { MantineProvider, Flex, TextInput, Button, Paper, Image } from '@mantine/core';
 
 function App() {
   const ref = useRef();
