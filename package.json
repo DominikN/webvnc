@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@mantine/core": "^6.0.10",
+    "@mantine/form": "^6.0.11",
     "@mantine/hooks": "^6.0.10",
     "@tabler/icons-preact": "^2.18.0",
     "preact": "^10.11.3",

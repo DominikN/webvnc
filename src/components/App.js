@@ -1,7 +1,8 @@
 import { h } from "preact";
 import { useRef, useState, useEffect } from 'preact/hooks';
 import { VncScreen } from 'react-vnc';
-import { MantineProvider, Flex, Text, TextInput, Button } from '@mantine/core';
+import { MantineProvider, Flex, Text, TextInput, Button, Paper, Image } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 function App() {
   const ref = useRef();
@@ -33,7 +34,24 @@ function App() {
   };
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark" }}>
+    <MantineProvider withGlobalStyles withNormalizeCSS theme={{
+      colorScheme: "dark",
+      colors: {
+        brand: [
+          "#FFAABB",
+          "#FF819B",
+          "#FF6382",
+          "#F74B6D",
+          "#ED385C",
+          "#E1294E",
+          "#CC2647",
+          "#BF1B3B",
+          "#B31131",
+          "#A90828",
+        ],
+      },
+      primaryColor: 'brand',
+    }}>
       <Flex
         justify="center"
         align="center"
@@ -49,11 +67,9 @@ function App() {
         }}
       >
         {!rfbOptions.credentials && (
-          <>
-            <img src="assets/sygnet.svg" alt="logo" style={{width: '20%', height: '20%'}} />
-            <Text fz="xl">Remote Desktop</Text>
+          <Paper shadow="xs" radius="md" p="md" withBorder  >
+            <Image ta="center" mx="auto" src="assets/sygnet.svg" alt="logo" style={{ width: '80%', height: '80%' }} />
             <form onSubmit={handlePasswordSubmit}>
-
               {!errorMessage && (
                 <TextInput
                   type="password"
@@ -76,9 +92,9 @@ function App() {
                   style={{ marginBottom: '2rem' }}
                 />
               )}
-              <Button variant="outline" type="submit" color="red" fullWidth >Submit</Button>
+              <Button  type="submit" color="brand.8" fullWidth >Start Remote Desktop</Button>
             </form>
-          </>
+          </Paper>
         )}
 
         {rfbOptions.credentials && (
